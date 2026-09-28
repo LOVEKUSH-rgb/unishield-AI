@@ -20,7 +20,7 @@ import os, sys, time, sqlalchemy
 url = os.environ.get("DATABASE_URL")
 if not url: sys.exit(0)
 engine = sqlalchemy.create_engine(url)
-for _ in range(15):
+for _ in range(45):
     try:
         conn = engine.connect()
         conn.close()
@@ -41,7 +41,7 @@ import os, sys, time, redis
 url = os.environ.get("REDIS_URL")
 if not url: sys.exit(0)
 client = redis.Redis.from_url(url)
-for _ in range(15):
+for _ in range(45):
     try:
         if client.ping():
             print("Redis is ready.")
