@@ -70,6 +70,9 @@ fi
 if [ "$ENVIRONMENT" != "test" ]; then
     echo "Running database migrations..."
     alembic upgrade head || echo "Migrations failed."
+    
+    echo "Seeding users manually since uvicorn started in the background..."
+    python -c 'from src.persistence.database import init_db; init_db()' || echo "Seeding failed."
 fi
 
 # Keep container alive by waiting on the webserver
