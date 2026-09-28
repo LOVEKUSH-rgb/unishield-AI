@@ -13,6 +13,8 @@ from src.utils.config import settings
 logger = get_logger(__name__)
 
 DATABASE_URL = settings.database_url
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 try:
     engine = create_engine(
