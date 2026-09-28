@@ -6,6 +6,11 @@ set -e
 
 echo "Starting UniShield AI API Entrypoint..."
 
+# Fix Render postgres:// dialect issue globally for this script
+if [[ "$DATABASE_URL" == postgres://* ]]; then
+    export DATABASE_URL="postgresql://${DATABASE_URL#postgres://}"
+fi
+
 # Wait for PostgreSQL
 if [ -n "$DATABASE_URL" ]; then
     echo "Checking database connection..."
@@ -55,10 +60,11 @@ if [ "$ENVIRONMENT" != "test" ]; then
 fi
 
 # Start the application
+PORT=${PORT:-8000}
 if [ "$ENVIRONMENT" = "development" ]; then
-    echo "Starting in DEVELOPMENT mode with reload..."
-    exec uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload
+    echo "Starting in DEVELOPMENT mode with reload on port $PORT..."
+    exec uvicorn src.api.app:app --host 0.0.0.0 --port $PORT --reload
 else
-    echo "Starting in PRODUCTION mode..."
-    exec uvicorn src.api.app:app --host 0.0.0.0 --port 8000
+    echo "Starting in PRODUCTION mode on port $PORT..."
+    exec uvicorn src.api.app:app --host 0.0.0.0 --port $PORT
 fi
