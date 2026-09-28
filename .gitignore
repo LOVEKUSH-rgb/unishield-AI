@@ -53,8 +53,6 @@ data/processed/*
 # ----------------------------------------------------------------
 src/models/trained/*
 !src/models/trained/.gitkeep
-src/models/training/*
-!src/models/training/.gitkeep
 
 # ----------------------------------------------------------------
 # Logs
