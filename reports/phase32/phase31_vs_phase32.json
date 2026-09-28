@@ -1,0 +1,134 @@
+{
+    "DDoS": {
+        "Phase31": {
+            "F1": 0.0,
+            "Precision": 0.0,
+            "Recall": 0.0,
+            "Mode": "unknown",
+            "Dataset": "demo_flows_expanded.jsonl"
+        },
+        "Phase32": {
+            "F1": 0.0,
+            "Precision": 0.0,
+            "Recall": 0.0,
+            "Mode": "default",
+            "Dataset": "demo_flows_expanded.jsonl"
+        },
+        "Delta": {
+            "F1": 0.0,
+            "Precision": 0.0,
+            "Recall": 0.0
+        },
+        "Change_Explanation": "Same dataset and ground truth. Any delta reflects detector behavior improvements (DDoS zero-duration handling) or evaluation methodology changes."
+    },
+    "Reconnaissance": {
+        "Phase31": {
+            "F1": 0.6175,
+            "Precision": 1.0,
+            "Recall": 0.4467,
+            "Mode": "unknown",
+            "Dataset": "demo_flows_expanded.jsonl"
+        },
+        "Phase32": {
+            "F1": 0.7658,
+            "Precision": 1.0,
+            "Recall": 0.6204,
+            "Mode": "default",
+            "Dataset": "demo_flows_expanded.jsonl"
+        },
+        "Delta": {
+            "F1": 0.1483,
+            "Precision": 0.0,
+            "Recall": 0.1737
+        },
+        "Change_Explanation": "Same dataset and ground truth. Any delta reflects detector behavior improvements (DDoS zero-duration handling) or evaluation methodology changes."
+    },
+    "C2_Beacon": {
+        "Phase31": {
+            "F1": 0.0,
+            "Precision": 0.0,
+            "Recall": 0.0,
+            "Mode": "unknown",
+            "Dataset": "demo_flows_expanded.jsonl"
+        },
+        "Phase32": {
+            "F1": 0.0049,
+            "Precision": 0.0025,
+            "Recall": 0.8182,
+            "Mode": "default",
+            "Dataset": "demo_flows_expanded.jsonl"
+        },
+        "Delta": {
+            "F1": 0.0049,
+            "Precision": 0.0025,
+            "Recall": 0.8182
+        },
+        "Change_Explanation": "Same dataset and ground truth. Any delta reflects detector behavior improvements (DDoS zero-duration handling) or evaluation methodology changes."
+    },
+    "Exfiltration": {
+        "Phase31": {
+            "F1": 1.0,
+            "Precision": 1.0,
+            "Recall": 1.0,
+            "Mode": "unknown",
+            "Dataset": "demo_flows_expanded.jsonl"
+        },
+        "Phase32": {
+            "F1": 1.0,
+            "Precision": 1.0,
+            "Recall": 1.0,
+            "Mode": "default",
+            "Dataset": "demo_flows_expanded.jsonl"
+        },
+        "Delta": {
+            "F1": 0.0,
+            "Precision": 0.0,
+            "Recall": 0.0
+        },
+        "Change_Explanation": "Same dataset and ground truth. Any delta reflects detector behavior improvements (DDoS zero-duration handling) or evaluation methodology changes."
+    },
+    "DNS_DGA": {
+        "Phase31": {
+            "F1": 0.8,
+            "Precision": 1.0,
+            "Recall": 0.6667,
+            "Mode": "unknown",
+            "Dataset": "demo_flows_expanded.jsonl"
+        },
+        "Phase32": {
+            "F1": 0.8,
+            "Precision": 1.0,
+            "Recall": 0.6667,
+            "Mode": "default",
+            "Dataset": "demo_flows_expanded.jsonl"
+        },
+        "Delta": {
+            "F1": 0.0,
+            "Precision": 0.0,
+            "Recall": 0.0
+        },
+        "Change_Explanation": "Same dataset and ground truth. Any delta reflects detector behavior improvements (DDoS zero-duration handling) or evaluation methodology changes."
+    },
+    "Encrypted_Anomaly": {
+        "Phase31": {
+            "F1": 0.2767,
+            "Precision": 0.1606,
+            "Recall": 1.0,
+            "Mode": "unknown",
+            "Dataset": "demo_flows_expanded.jsonl"
+        },
+        "Phase32": {
+            "F1": 0.2767,
+            "Precision": 0.1606,
+            "Recall": 1.0,
+            "Mode": "default",
+            "Dataset": "demo_flows_expanded.jsonl"
+        },
+        "Delta": {
+            "F1": 0.0,
+            "Precision": 0.0,
+            "Recall": 0.0
+        },
+        "Change_Explanation": "Same dataset and ground truth. Any delta reflects detector behavior improvements (DDoS zero-duration handling) or evaluation methodology changes."
+    }
+}

@@ -1,0 +1,15 @@
+{
+  "benchmark_name": "Overload Test (5000 fps)",
+  "target_rate": 5000,
+  "duration": 29.15132188796997,
+  "received": 10000,
+  "processed": 10000,
+  "dropped": 0,
+  "throughput": 343.03761724530074,
+  "average_latency_ms": 2.775988817214966,
+  "alerts": 8369,
+  "incidents": 257,
+  "start_memory_mb": 181.53515625,
+  "peak_memory_mb": 181.58984375,
+  "end_memory_mb": 181.46875
+}

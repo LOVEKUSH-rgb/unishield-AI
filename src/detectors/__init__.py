@@ -1,0 +1,1 @@
+# UniShield AI — detectors package

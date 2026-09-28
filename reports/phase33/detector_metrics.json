@@ -1,0 +1,80 @@
+{
+    "DDoS": {
+        "TP": 0,
+        "TN": 0,
+        "FP": 4510,
+        "FN": 0,
+        "Precision": 0.0,
+        "Recall": null,
+        "F1": null,
+        "Accuracy": 0.0,
+        "FPR": 1.0,
+        "FNR": null,
+        "Status": "COMPLETE"
+    },
+    "Reconnaissance": {
+        "TP": 0,
+        "TN": 0,
+        "FP": 4510,
+        "FN": 0,
+        "Precision": 0.0,
+        "Recall": null,
+        "F1": null,
+        "Accuracy": 0.0,
+        "FPR": 1.0,
+        "FNR": null,
+        "Status": "COMPLETE"
+    },
+    "C2_Beacon": {
+        "TP": 0,
+        "TN": 0,
+        "FP": 4510,
+        "FN": 0,
+        "Precision": 0.0,
+        "Recall": null,
+        "F1": null,
+        "Accuracy": 0.0,
+        "FPR": 1.0,
+        "FNR": null,
+        "Status": "COMPLETE"
+    },
+    "Exfiltration": {
+        "TP": 0,
+        "TN": 0,
+        "FP": 4510,
+        "FN": 0,
+        "Precision": 0.0,
+        "Recall": null,
+        "F1": null,
+        "Accuracy": 0.0,
+        "FPR": 1.0,
+        "FNR": null,
+        "Status": "COMPLETE"
+    },
+    "DNS_DGA": {
+        "TP": 0,
+        "TN": 0,
+        "FP": 4510,
+        "FN": 0,
+        "Precision": 0.0,
+        "Recall": null,
+        "F1": null,
+        "Accuracy": 0.0,
+        "FPR": 1.0,
+        "FNR": null,
+        "Status": "COMPLETE"
+    },
+    "Encrypted_Anomaly": {
+        "TP": 0,
+        "TN": 0,
+        "FP": 4510,
+        "FN": 0,
+        "Precision": 0.0,
+        "Recall": null,
+        "F1": null,
+        "Accuracy": 0.0,
+        "FPR": 1.0,
+        "FNR": null,
+        "Status": "COMPLETE"
+    }
+}

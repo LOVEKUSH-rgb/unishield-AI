@@ -1,0 +1,15 @@
+{
+  "benchmark_name": "High Rate (1000 fps)",
+  "target_rate": 1000,
+  "duration": 10.916439533233643,
+  "received": 5000,
+  "processed": 5000,
+  "dropped": 0,
+  "throughput": 458.02479689262856,
+  "average_latency_ms": 1.5487154483795167,
+  "alerts": 3630,
+  "incidents": 257,
+  "start_memory_mb": 170.328125,
+  "peak_memory_mb": 173.14453125,
+  "end_memory_mb": 173.0859375
+}

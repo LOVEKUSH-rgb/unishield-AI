@@ -1,0 +1,36 @@
+{
+    "DDoS": {
+        "FP": {},
+        "FN": {
+            "zero duration": 6600
+        }
+    },
+    "Reconnaissance": {
+        "FP": {},
+        "FN": {
+            "zero duration": 673
+        }
+    },
+    "C2_Beacon": {
+        "FP": {
+            "sparse packet count": 1376,
+            "zero duration": 5861,
+            "periodicity boundary (insufficient connections)": 36
+        },
+        "FN": {
+            "periodicity boundary (insufficient connections)": 4
+        }
+    },
+    "DNS_DGA": {
+        "FP": {},
+        "FN": {
+            "zero duration": 22
+        }
+    },
+    "Encrypted_Anomaly": {
+        "FP": {
+            "zero duration": 115
+        },
+        "FN": {}
+    }
+}

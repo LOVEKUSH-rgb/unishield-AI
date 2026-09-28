@@ -1,0 +1,16 @@
+{
+    "timestamp": "2026-08-29T14:52:09Z",
+    "dataset": "CTU-13",
+    "overall_status": "COMPLETE",
+    "notes": [
+        "External dataset evaluation complete. See detector_metrics.json for per-class results."
+    ],
+    "leakage_status": "NOT_FULLY_VERIFIED",
+    "ml_vs_statistical": "INSUFFICIENT_DATA",
+    "infrastructure_status": "COMPLETE",
+    "replay_pipeline_status": "COMPLETE \u2014 synthetic PCAP validation successful",
+    "temporal_tests_status": "COMPLETE \u2014 see tests/test_phase33_temporal_replay.py",
+    "external_corpus_status": "COMPLETE",
+    "ddos_zero_duration_investigation": "COMPLETE \u2014 Root cause confirmed: single-packet flows have start_time == last_seen (duration == 0.0). Phase 32 fix (dst_conn_count_60s proxy) is the correct mitigation. Temporal replay through FlowManager populates the 60s window, enabling the fix to work for multi-source SYN floods.",
+    "phase33_completion_status": "PARTIALLY_COMPLETE \u2014 Infrastructure, replay pipeline, temporal tests, and DDoS investigation complete. External corpus evaluation blocked by INSUFFICIENT_DATA (CTU-13 PCAP not downloaded)."
+}

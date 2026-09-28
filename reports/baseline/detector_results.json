@@ -1,0 +1,62 @@
+{
+    "DDoS": {
+        "Dataset": "CIC-IDS2017",
+        "Status": "DATASET NOT AVAILABLE",
+        "Precision": "NOT VALIDATED",
+        "Recall": "NOT VALIDATED",
+        "F1": "NOT VALIDATED",
+        "FPR": "NOT VALIDATED",
+        "Throughput_fps": "NOT VALIDATED",
+        "Latency_ms": "NOT VALIDATED"
+    },
+    "Reconnaissance": {
+        "Dataset": "CIC-IDS2017",
+        "Status": "DATASET NOT AVAILABLE",
+        "Precision": "NOT VALIDATED",
+        "Recall": "NOT VALIDATED",
+        "F1": "NOT VALIDATED",
+        "FPR": "NOT VALIDATED",
+        "Throughput_fps": "NOT VALIDATED",
+        "Latency_ms": "NOT VALIDATED"
+    },
+    "C2_Beacon": {
+        "Dataset": "CTU-13",
+        "Status": "DATASET NOT AVAILABLE",
+        "Precision": "NOT VALIDATED",
+        "Recall": "NOT VALIDATED",
+        "F1": "NOT VALIDATED",
+        "FPR": "NOT VALIDATED",
+        "Throughput_fps": "NOT VALIDATED",
+        "Latency_ms": "NOT VALIDATED"
+    },
+    "Exfiltration": {
+        "Dataset": "BoT-IoT",
+        "Status": "DATASET NOT AVAILABLE",
+        "Precision": "NOT VALIDATED",
+        "Recall": "NOT VALIDATED",
+        "F1": "NOT VALIDATED",
+        "FPR": "NOT VALIDATED",
+        "Throughput_fps": "NOT VALIDATED",
+        "Latency_ms": "NOT VALIDATED"
+    },
+    "DNS_DGA": {
+        "Dataset": "DNS-DGA (Synthetic/Custom)",
+        "Status": "DATASET NOT AVAILABLE",
+        "Precision": "NOT VALIDATED",
+        "Recall": "NOT VALIDATED",
+        "F1": "NOT VALIDATED",
+        "FPR": "NOT VALIDATED",
+        "Throughput_fps": "NOT VALIDATED",
+        "Latency_ms": "NOT VALIDATED"
+    },
+    "Encrypted_Anomaly": {
+        "Dataset": "CIC-Darknet2020",
+        "Status": "DATASET NOT AVAILABLE",
+        "Precision": "NOT VALIDATED",
+        "Recall": "NOT VALIDATED",
+        "F1": "NOT VALIDATED",
+        "FPR": "NOT VALIDATED",
+        "Throughput_fps": "NOT VALIDATED",
+        "Latency_ms": "NOT VALIDATED"
+    }
+}

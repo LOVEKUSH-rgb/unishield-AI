@@ -1,0 +1,89 @@
+{
+    "timestamp": "2026-08-29T14:53:44Z",
+    "pcap_file": "data\\raw\\external\\ctu13\\botnet-capture-20110810-neris.pcap",
+    "mode": "default",
+    "max_packets_limit": 50000,
+    "flow_timeout_seconds": 120.0,
+    "ingestion": {
+        "packets_read": 50000,
+        "packets_skipped": 352,
+        "events_produced": 49824,
+        "parse_errors": 0,
+        "dns_events": 842,
+        "tls_events": 145,
+        "elapsed_seconds": 80.9348,
+        "packet_throughput_pps": 617.78
+    },
+    "flows": {
+        "total_flows": 4510,
+        "feature_vectors_produced": 4510,
+        "zero_duration_flows": 1209,
+        "nonzero_duration_flows": 3301,
+        "zero_duration_fraction": 0.2681,
+        "flow_duration_stats_seconds": {
+            "min": 0.0,
+            "max": 3039.1939,
+            "mean": 9.9423,
+            "median": 0.3414
+        }
+    },
+    "detection": {
+        "total_alerts": 27060,
+        "alerts_by_detector": {
+            "DDoS": 4510,
+            "Reconnaissance": 4510,
+            "C2_Beacon": 4510,
+            "Exfiltration": 4510,
+            "DNS_DGA": 4510,
+            "Encrypted_Anomaly": 4510
+        }
+    },
+    "performance": {
+        "total_replay_seconds": 82.178,
+        "flows_per_second": 54.88,
+        "feature_vector_latency_ms": {
+            "P50": 2.5090000053751282,
+            "P90": 7.70619999821065,
+            "P95": 9.028500004205853,
+            "P99": 11.520799998834264
+        },
+        "full_pipeline_latency_ms": {
+            "P50": 2.896600002713967,
+            "P90": 5.515600001672283,
+            "P95": 6.349499999487307,
+            "P99": 7.386199999018572
+        },
+        "detector_latency_ms": {
+            "DDoS": {
+                "P50": 0.20629999926313758,
+                "P90": 0.27210000553168356,
+                "P99": 0.41880000208038837
+            },
+            "Reconnaissance": {
+                "P50": 0.07510000432375818,
+                "P90": 0.10720000136643648,
+                "P99": 0.15810000331839547
+            },
+            "C2_Beacon": {
+                "P50": 2.4246999964816496,
+                "P90": 5.01339999755146,
+                "P99": 6.891000004543457
+            },
+            "Exfiltration": {
+                "P50": 0.07500000356230885,
+                "P90": 0.109200002043508,
+                "P99": 0.16969999705906957
+            },
+            "DNS_DGA": {
+                "P50": 0.03619999915827066,
+                "P90": 0.0501000031363219,
+                "P99": 0.08730000263312832
+            },
+            "Encrypted_Anomaly": {
+                "P50": 0.03360000118846074,
+                "P90": 0.04959999932907522,
+                "P99": 0.09180000051856041
+            }
+        }
+    }
+}

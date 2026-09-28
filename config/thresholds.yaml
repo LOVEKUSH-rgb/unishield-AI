@@ -1,0 +1,378 @@
+# ============================================================
+# UniShield AI — Detection Thresholds
+# SIH Problem Statement 26145
+# ============================================================
+# All detection thresholds live here.
+# Rationale for each value is documented inline.
+# ============================================================
+
+# ----------------------------------------------------------------
+# Evidence Fusion
+# ----------------------------------------------------------------
+fusion:
+  min_confidence_to_alert: 0.50  # below this → suppress alert
+  high_confidence: 0.80
+  critical_confidence: 0.90
+
+# ----------------------------------------------------------------
+# Severity Thresholds (combined risk score → severity label)
+# ----------------------------------------------------------------
+severity:
+  low_min: 0.30
+  medium_min: 0.50
+  high_min: 0.70
+  critical_min: 0.88
+
+# ----------------------------------------------------------------
+# DDoS Detector
+# ----------------------------------------------------------------
+ddos:
+  # ------------------------------------------------------------------
+  # Baseline (Exponentially Weighted Moving Average)
+  # ------------------------------------------------------------------
+  baseline:
+    ewma_alpha: 0.15            # smoothing factor (0=no update, 1=instant)
+    warmup_packets: 500         # events before baseline is trusted
+    min_baseline_pps: 10.0      # floor to avoid division by zero during cold-start
+
+  # ------------------------------------------------------------------
+  # Sub-detector weights (must sum to 1.0)
+  # ------------------------------------------------------------------
+  weights:
+    rate_anomaly: 0.30          # volumetric rate vs baseline
+    syn_flood: 0.30             # SYN-specific indicators
+    udp_flood: 0.20             # UDP-specific indicators
+    source_anomaly: 0.20        # source IP distribution anomalies
+
+  # ------------------------------------------------------------------
+  # Rate anomaly thresholds
+  # ------------------------------------------------------------------
+  rate:
+    pps_z_score_alert: 3.0      # z-score above which rate is anomalous
+    pps_absolute_min: 2000      # pps floor (below → not DDoS regardless of z-score)
+    bps_z_score_alert: 3.0
+    bps_absolute_min: 5000000   # 5 MB/s floor
+
+  # ------------------------------------------------------------------
+  # Burst detection (short-window spike)
+  # ------------------------------------------------------------------
+  burst:
+    window_seconds: 5           # burst window size
+    multiplier: 8.0             # current_pps > baseline_pps * multiplier → burst
+    min_pps_for_burst: 1000     # minimum rate to call it a burst
+
+  # ------------------------------------------------------------------
+  # SYN flood thresholds
+  # ------------------------------------------------------------------
+  syn_flood:
+    syn_ratio_threshold: 0.80   # SYN / total packets ratio → suspicious
+    syn_ratio_high: 0.95        # very high SYN ratio → strong indicator
+    syn_pps_z_score: 3.0        # SYN rate z-score threshold
+    syn_pps_absolute_min: 500   # minimum SYN/s to flag
+    max_syn_only_ratio: 0.90    # SYN without SYN-ACK ratio → suspicious
+
+  # ------------------------------------------------------------------
+  # UDP flood thresholds
+  # ------------------------------------------------------------------
+  udp_flood:
+    udp_pps_z_score: 3.0        # UDP rate z-score
+    udp_pps_absolute_min: 1000  # minimum UDP pps to flag
+    large_packet_ratio: 0.70    # fraction of max-size packets → amplification hint
+    max_packet_size_threshold: 1400  # bytes; large UDP → possible amplification
+
+  # ------------------------------------------------------------------
+  # Source anomaly thresholds
+  # ------------------------------------------------------------------
+  source:
+    # High unique-source count → possible spoofed-source flood
+    uniq_src_high_threshold: 100   # >N unique sources in window → suspicious
+    # Source entropy bounds:
+    #   Very low = concentrated source (single-source flood)
+    #   Very high = randomised/spoofed sources
+    entropy_low_threshold: 1.5     # bits; below → concentrated flood
+    entropy_high_threshold: 7.0    # bits; above → highly randomised sources
+    # Source concentration: 1 = all from one source, 0 = perfectly distributed
+    concentration_high: 0.90       # high concentration → single-source flood
+    concentration_low: 0.05        # very low → possibly spoofed diverse sources
+
+  # ------------------------------------------------------------------
+  # Alert deduplication
+  # ------------------------------------------------------------------
+  deduplication:
+    window_seconds: 30             # suppress duplicate alerts within this window
+    max_active_alerts: 1000        # cap on in-memory active alert state
+
+  # ------------------------------------------------------------------
+  # Minimum confidence to emit an alert (overrides fusion.min_confidence_to_alert)
+  # ------------------------------------------------------------------
+  min_confidence_to_alert: 0.50
+  min_score_to_alert: 0.35
+
+# ----------------------------------------------------------------
+# C2 Beaconing Detector
+# ----------------------------------------------------------------
+c2_beacon:
+  # ------------------------------------------------------------------
+  # Minimum flow count before analysis is triggered
+  # ------------------------------------------------------------------
+  min_flows_for_analysis: 5      # require at least 5 connections before scoring
+  max_tracked_connections: 200   # per (src,dst,dport) tuple: max timestamps kept
+
+  # ------------------------------------------------------------------
+  # Inter-connection interval (ICI) bounds
+  # Connections outside these bounds are excluded from interval analysis
+  # Rationale: very fast reconnects are noise; very slow are not beacons
+  # ------------------------------------------------------------------
+  interval:
+    min_sec: 5        # minimum ICI to consider (below = noise/retransmit)
+    max_sec: 7200     # maximum ICI to consider (above = too slow for beacon)
+
+  # ------------------------------------------------------------------
+  # Periodicity scoring (IAT Coefficient of Variation)
+  #
+  # CV = std(intervals) / mean(intervals)
+  # Interpretation:
+  #   CV = 0.0        → perfectly periodic (every interval identical)
+  #   CV < 0.15       → highly periodic, suspicious
+  #   CV 0.15–0.35    → moderately periodic, worth noting
+  #   CV 0.35–0.60    → irregular, likely not beaconing
+  #   CV > 0.60       → random traffic
+  #
+  # Score formula:
+  #   periodicity_score = max(0, 1 - CV / cv_random_threshold)
+  # ------------------------------------------------------------------
+  periodicity:
+    cv_highly_periodic: 0.15    # CV below this → strong periodicity signal
+    cv_moderately_periodic: 0.35  # CV below this → moderate signal
+    cv_random_threshold: 0.60   # CV above this → score = 0
+
+  # ------------------------------------------------------------------
+  # Jitter tolerance
+  # Real C2 malware often adds ±20% jitter to evade exact-match detection
+  # The CV thresholds above already handle this naturally
+  # ------------------------------------------------------------------
+  jitter_tolerance_pct: 0.30    # ≤30% CV still considered periodic
+
+  # ------------------------------------------------------------------
+  # Destination repetition scoring
+  # ------------------------------------------------------------------
+  destination:
+    # Number of connections to SAME (dst_ip, dst_port) pair
+    low_repeat_count: 10        # ≥10 connections → low-grade signal
+    medium_repeat_count: 25     # ≥25 → moderate signal
+    high_repeat_count: 50       # ≥50 → strong signal
+
+  # ------------------------------------------------------------------
+  # Packet-size consistency scoring
+  # Beacons often send fixed-size keepalive/checkin packets
+  # CV of per-connection byte_count or packet_count
+  # ------------------------------------------------------------------
+  size_consistency:
+    byte_cv_low: 0.15           # very consistent byte counts → suspicious
+    byte_cv_high: 0.80          # very variable → not suspicious by size alone
+    pkt_cv_low: 0.20
+
+  # ------------------------------------------------------------------
+  # Sub-detector weights (must sum to 1.0)
+  # ------------------------------------------------------------------
+  weights:
+    periodicity: 0.40           # strongest signal for C2 beaconing
+    destination_repeat: 0.25    # repeated targeting of same endpoint
+    size_consistency: 0.20      # uniform packet sizes per session
+    behavioral_anomaly: 0.15    # source normally diverse, now focused
+
+  # ------------------------------------------------------------------
+  # Alert thresholds
+  # ------------------------------------------------------------------
+  min_score_to_alert: 0.35
+  min_confidence_to_alert: 0.45
+
+  # ------------------------------------------------------------------
+  # Deduplication
+  # ------------------------------------------------------------------
+  deduplication:
+    window_seconds: 300         # 5-minute dedup window for C2 alerts
+    max_active_alerts: 5000
+
+  # ------------------------------------------------------------------
+  # Optional ML (Isolation Forest)
+  # ------------------------------------------------------------------
+  ml:
+    enabled: false              # off by default until trained on real dataset
+    contamination: 0.05         # expected fraction of anomalies (5%)
+    n_estimators: 100
+    model_path: "models/c2_isolation_forest.pkl"
+
+
+# ----------------------------------------------------------------
+# DGA / DNS Tunnelling Detector
+# ----------------------------------------------------------------
+dga_dns:
+  # ------------------------------------------------------------------
+  # DGA (Domain Generation Algorithm) Detection
+  # ------------------------------------------------------------------
+  dga:
+    # Lexical entropy (Shannon)
+    entropy_high: 4.2           # Highly suspicious entropy
+    entropy_moderate: 3.5       # Moderately suspicious entropy
+    
+    # N-gram entropy
+    ngram_entropy_high: 3.8     # Very random n-gram distribution
+    ngram_entropy_moderate: 3.2 # Moderately random
+    
+    # Structural anomalies
+    length_suspicious: 35       # Domains longer than this get higher scores
+    digit_ratio_high: 0.30      # Domain is >30% numbers
+    unique_char_high: 25        # High unique character count
+    
+    # DGA Sub-detector weights
+    weights:
+      lexical_entropy: 0.60
+      structural_anomaly: 0.40
+      
+    # Alert thresholds
+    min_score_to_alert: 0.35
+    min_confidence_to_alert: 0.45
+
+    # Optional ML    # ML configuration
+    ml:
+      enabled: true
+      model_path: "models/trained/dga_random_forest.pkl"
+
+  # ------------------------------------------------------------------
+  # DNS Tunnelling Detection
+  # ------------------------------------------------------------------
+  tunnel:
+    # Traffic minimums (cold-start)
+    min_queries_for_analysis: 20
+    
+    # Time windows to track per source
+    tracking_window_seconds: 300
+    
+    # Volumetric anomalies
+    query_rate_high: 5.0        # Queries per second (300/min)
+    query_rate_moderate: 2.0    # Queries per second (120/min)
+    
+    # Payload anomalies
+    avg_query_length_high: 50
+    avg_entropy_high: 4.0
+    
+    # Subdomain churn
+    unique_subdomain_ratio_high: 0.80 # 80% of queries are unique subdomains
+    min_unique_subdomains: 20   # Floor before scoring this
+    
+    # Record type anomalies
+    txt_null_ratio_high: 0.50   # 50%+ of queries are TXT or NULL
+    
+    # Tunnelling Sub-detector weights
+    weights:
+      volume: 0.25
+      payload: 0.35
+      churn: 0.25
+      record_type: 0.15
+      
+    # Alert thresholds
+    min_score_to_alert: 0.40
+    min_confidence_to_alert: 0.45
+    
+  # ------------------------------------------------------------------
+  # Deduplication
+  # ------------------------------------------------------------------
+  deduplication:
+    window_seconds: 300
+    max_active_alerts: 5000
+
+# ----------------------------------------------------------------
+# Encrypted Session Detector
+# ----------------------------------------------------------------
+encrypted_session:
+  # SPLT bounds
+  splt_max_sequence_length: 20  # Limit memory growth per flow
+  
+  # ML Model config
+  ml:
+    enabled: false
+    model_path: "models/trained/encrypted_xgboost.json"
+    rf_fallback_path: "models/trained/encrypted_rf.pkl"
+    
+  # Alert generation
+  min_score_to_alert: 0.60
+  min_confidence_to_alert: 0.50
+  
+  # Deduplication
+  deduplication:
+    window_seconds: 300
+    max_active_alerts: 5000
+
+# ----------------------------------------------------------------
+# Reconnaissance Detector
+# ----------------------------------------------------------------
+reconnaissance:
+  # General threshold (don't alert on less than this many connections)
+  min_connections: 30
+  
+  # Scan type specific thresholds
+  horizontal:
+    min_hosts: 30
+    max_ports: 5
+    
+  vertical:
+    min_ports: 30
+    max_hosts: 2
+    
+  host_sweep:
+    min_host_port_pairs: 50
+    
+  network_sweep:
+    min_subnets: 10
+    
+  # Confidence tuning
+  syn_ratio_high: 0.80
+  
+  # Alert generation
+  min_score_to_alert: 0.40
+  min_confidence_to_alert: 0.50
+  
+  # Deduplication
+  deduplication:
+    window_seconds: 300
+    max_active_alerts: 5000
+
+# ----------------------------------------------------------------
+# Data Exfiltration Detector
+# ----------------------------------------------------------------
+exfiltration:
+  # Base requirements
+  min_byte_count: 50000           # Minimum 50KB to be considered a burst anomaly standalone
+  
+  # Baseline requirements
+  baseline_min_flows: 50
+  
+  # Suspicious Multipliers
+  burst_deviation_multiplier: 5.0   # If 60s volume is 5x daily average rate
+  sustained_deviation_multiplier: 3.0 # If daily volume is 3x baseline average
+  asymmetry_ratio_threshold: 15.0     # outbound bytes / inbound bytes
+  
+  # Alert generation
+  min_score_to_alert: 0.60
+  min_confidence_to_alert: 0.50
+  
+  # Deduplication
+  deduplication:
+    window_seconds: 900             # Exfiltration is slow, group over 15 mins
+    max_active_alerts: 5000
+
+# ----------------------------------------------------------------
+# Encrypted Traffic Detector
+# ----------------------------------------------------------------
+encrypted:
+  # Packet size variation (low = tunnelled/automated)
+  pkt_size_std_threshold_low: 10.0   # very uniform → suspicious
+  pkt_size_std_threshold_high: 800.0 # unusually varied → suspicious
+  # Flow duration
+  suspicious_short_session_sec: 2.0
+  suspicious_long_session_sec: 3600.0
+  # TLS
+  self_signed_cert_score: 0.40       # score added when self-signed detected
+  unusual_tls_version_score: 0.30    # score added for TLS 1.0 / SSLv3
+  unusual_cipher_score: 0.25

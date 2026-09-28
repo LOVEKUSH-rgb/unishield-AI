@@ -1,0 +1,96 @@
+# UniShield AI — docker-compose (Production)
+# Used for production deployment with strict isolation, no local volumes, and restart policies.
+
+version: "3.9"
+
+networks:
+  unishield-frontend:
+    driver: bridge
+  unishield-backend:
+    driver: bridge
+
+services:
+  unishield-api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+    networks:
+      - unishield-frontend
+      - unishield-backend
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB:-unishield}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB:-unishield}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    networks:
+      - unishield-backend
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    networks:
+      - unishield-backend
+
+  unishield-dashboard:
+    build: 
+      context: .
+      dockerfile: docker/Dockerfile.dashboard
+    container_name: unishield-dashboard
+    depends_on:
+      - unishield-api
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://unishield-api:8000
+    restart: always
+    networks:
+      - unishield-frontend
+    
+  zeek:
+    image: zeek/zeek:latest
+    container_name: unishield-zeek
+    volumes:
+      - ./data/samples/zeek_logs:/var/log/zeek
+    command: ["zeek", "-i", "eth0", "LogAscii::use_json=T"]
+    restart: always
+    networks:
+      - unishield-backend
+
+volumes:
+  pgdata:

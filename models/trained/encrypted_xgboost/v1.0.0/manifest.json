@@ -1,0 +1,18 @@
+{
+    "model_name": "encrypted_xgboost",
+    "model_type": "xgboost",
+    "version": "v1.0.0",
+    "artifact": "encrypted_xgboost.json",
+    "sha256": "3f17be8602a94dc28a25b0cf123e09dadbe7d7721d14351caba40d4a9b4b89c4",
+    "feature_schema_version": "v1",
+    "framework": "xgboost",
+    "dataset": "CIC-IDS2017 Sample (Real Data)",
+    "trained_at": "2026-08-29T07:51:53.897413+00:00",
+    "metrics": {
+        "precision": 0.9777710570089219,
+        "recall": 0.9528440907751252,
+        "f1": 0.9651466527352788,
+        "roc_auc": 0.9926905488738602
+    },
+    "status": "active"
+}

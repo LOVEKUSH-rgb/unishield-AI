@@ -1,0 +1,22 @@
+{
+    "datasets": [
+        {
+            "name": "CIC-IDS2017",
+            "source": "https://www.unb.ca/cic/datasets/ids-2017.html",
+            "status": "NOT AVAILABLE",
+            "classes": ["DDOS", "RECONNAISSANCE"]
+        },
+        {
+            "name": "CTU-13",
+            "source": "https://www.stratosphereips.org/datasets-ctu13",
+            "status": "NOT AVAILABLE",
+            "classes": ["C2_BEACON"]
+        },
+        {
+            "name": "BoT-IoT",
+            "source": "https://research.unsw.edu.au/projects/bot-iot-dataset",
+            "status": "NOT AVAILABLE",
+            "classes": ["EXFILTRATION"]
+        }
+    ]
+}

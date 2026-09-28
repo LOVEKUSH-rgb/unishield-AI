@@ -1,0 +1,84 @@
+groups:
+  - name: unishield_recording_rules
+    rules:
+      - record: unishield:ingestion_events_per_second
+        expr: rate(unishield_ingestion_events_total[1m])
+      - record: unishield:ingestion_drop_rate
+        expr: rate(unishield_ingestion_dropped_total[1m])
+      - record: unishield:detector_error_rate
+        expr: rate(unishield_detector_errors_total[1m])
+      - record: unishield:detector_alert_rate
+        expr: rate(unishield_detector_alerts_total[1m])
+      - record: unishield:pipeline_p95_latency
+        expr: histogram_quantile(0.95, sum(rate(unishield_pipeline_latency_seconds_bucket[1m])) by (le))
+      - record: unishield:pipeline_p99_latency
+        expr: histogram_quantile(0.99, sum(rate(unishield_pipeline_latency_seconds_bucket[1m])) by (le))
+      - record: unishield:database_error_rate
+        expr: rate(unishield_database_errors_total[1m])
+      - record: unishield:redis_error_rate
+        expr: rate(unishield_redis_errors_total[1m])
+
+  - name: unishield_alerts
+    rules:
+      - alert: UniShieldAPIDown
+        expr: up{job="unishield-api"} == 0
+        for: 1m
+        labels:
+          severity: CRITICAL
+        annotations:
+          summary: "UniShield API is down"
+          description: "Prometheus could not scrape the UniShield API metrics endpoint."
+
+      - alert: DatabaseErrorsDetected
+        expr: unishield:database_error_rate > 0.05
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          summary: "Database errors detected"
+          description: "Database error rate exceeded 5% over the last minute."
+
+      - alert: RedisErrorsDetected
+        expr: unishield:redis_error_rate > 0.05
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          summary: "Redis errors detected"
+          description: "Redis error rate exceeded 5% over the last minute."
+
+      - alert: IngestionDropsDetected
+        expr: unishield:ingestion_drop_rate > 0
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          summary: "Ingestion events are being dropped"
+          description: "The pipeline is dropping events, possibly due to a full queue or parsing issues."
+
+      - alert: IngestionQueueSaturated
+        expr: unishield_ingestion_queue_depth > 50000
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          summary: "Ingestion queue saturated"
+          description: "The background ingestion queue has exceeded 50,000 items."
+
+      - alert: DetectorErrorsDetected
+        expr: unishield:detector_error_rate > 0
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          summary: "Detectors are throwing errors"
+          description: "One or more detectors have encountered execution errors."
+
+      - alert: HighPipelineLatency
+        expr: unishield:pipeline_p95_latency > 0.5
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          summary: "High pipeline latency"
+          description: "The P95 pipeline processing latency is above 500ms."

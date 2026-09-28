@@ -1,0 +1,125 @@
+name: UniShield CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+        cache: "pip"
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Run Pytest (Unit, Integration, Security, Zeek)
+      env:
+        ENVIRONMENT: test
+        JWT_SECRET_KEY: ci-test-secret-key-do-not-use
+        DATABASE_URL: sqlite:///./data/unishield_test.db
+      run: |
+        pytest tests/ -v --cov=src
+
+    - name: Run Phase 32 Detector Robustness Tests
+      env:
+        ENVIRONMENT: test
+        JWT_SECRET_KEY: ci-test-secret-key-do-not-use
+        DATABASE_URL: sqlite:///./data/unishield_test.db
+        PYTHONPATH: "."
+      run: |
+        # Generate edge case corpus
+        python scripts/generate_edge_cases.py
+        # Run detector robustness test suite (all detectors on edge-case inputs)
+        pytest tests/test_phase32_detector_robustness.py -v
+
+    - name: Run Phase 32 Benchmark (Statistical Fallback)
+      env:
+        ENVIRONMENT: test
+        JWT_SECRET_KEY: ci-test-secret-key-do-not-use
+        DATABASE_URL: sqlite:///./data/unishield_test.db
+        PYTHONPATH: "."
+      run: |
+        # Only run statistical mode — ML artifacts may be absent in CI
+        mkdir -p reports/phase32
+        python scripts/benchmark_detectors.py \
+          --mode statistical \
+          --output reports/phase32/ci_baseline_statistical.json
+        echo "Benchmark complete. See reports/phase32/ci_baseline_statistical.json for results."
+        # Fail if any detector returned an execution error (not an INSUFFICIENT DATA score)
+        python -c "
+        import json, sys
+        with open('reports/phase32/ci_baseline_statistical.json') as f:
+            r = json.load(f)
+        for det, m in r.items():
+            if m.get('Status') not in ('EVALUATED', 'INSUFFICIENT DATA'):
+                print(f'REGRESSION: {det} returned unexpected status: {m[\"Status\"]}')
+                sys.exit(1)
+        print('All detectors returned expected statuses.')
+        "
+
+  docker-smoke-test:
+    name: Docker Build & Smoke Test
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Create required directories
+      run: mkdir -p data/models/trained
+      
+    - name: Build and Start Infrastructure (Test Environment)
+      run: |
+        echo "JWT_SECRET_KEY=smoke-test-secret" > .env
+        docker compose -f docker-compose.test.yml up -d --build
+        
+    - name: Wait for Health Checks
+      run: |
+        echo "Waiting for PostgreSQL and Redis to be healthy..."
+        sleep 10
+        # Check if containers are running
+        docker ps
+        
+    - name: Run API Smoke Test
+      run: |
+        docker compose -f docker-compose.test.yml exec -T unishield-api python -c "
+        import requests, time, sys
+        for _ in range(15):
+            try:
+                res = requests.get('http://localhost:8000/health/live')
+                if res.status_code == 200:
+                    print('API is healthy.')
+                    
+                    # Test Prometheus
+                    prom = requests.get('http://prometheus:9090/-/healthy')
+                    if prom.status_code == 200:
+                        print('Prometheus is healthy.')
+                    
+                    # Test Grafana
+                    graf = requests.get('http://grafana:3000/api/health')
+                    if graf.status_code == 200:
+                        print('Grafana is healthy.')
+                    
+                    sys.exit(0)
+            except Exception as e:
+                time.sleep(2)
+        print('API smoke test failed.')
+        sys.exit(1)
+        "
+        
+    - name: Tear down
+      if: always()
+      run: docker compose -f docker-compose.test.yml down -v

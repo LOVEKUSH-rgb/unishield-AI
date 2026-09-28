@@ -1,0 +1,89 @@
+# .gitignore — UniShield AI
+
+# ----------------------------------------------------------------
+# Python
+# ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+.Python
+env/
+venv/
+.venv/
+pip-wheel-metadata/
+
+# ----------------------------------------------------------------
+# Testing / Coverage
+# ----------------------------------------------------------------
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.cover
+
+# ----------------------------------------------------------------
+# Jupyter
+# ----------------------------------------------------------------
+.ipynb_checkpoints/
+*.ipynb
+
+# ----------------------------------------------------------------
+# Data — do not commit raw or processed data
+# (samples/ is committed for demo purposes)
+# ----------------------------------------------------------------
+data/raw/*
+!data/raw/.gitkeep
+!data/raw/external/
+data/raw/external/**/*.pcap
+data/raw/external/**/*.pcapng
+data/raw/external/**/*.cap
+!data/raw/external/**/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# ----------------------------------------------------------------
+# Models — do not commit large binary model files
+# ----------------------------------------------------------------
+src/models/trained/*
+!src/models/trained/.gitkeep
+src/models/training/*
+!src/models/training/.gitkeep
+
+# ----------------------------------------------------------------
+# Logs
+# ----------------------------------------------------------------
+logs/
+*.log
+
+# ----------------------------------------------------------------
+# Database files
+# ----------------------------------------------------------------
+*.db
+*.sqlite
+*.sqlite3
+
+# ----------------------------------------------------------------
+# Environment and IDE
+# ----------------------------------------------------------------
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ----------------------------------------------------------------
+# OS
+# ----------------------------------------------------------------
+$RECYCLE.BIN/
+desktop.ini

@@ -1,0 +1,52 @@
+# ----------------------------------------------------------------
+# Unified Risk Engine Rules
+# ----------------------------------------------------------------
+risk:
+  levels:
+    informational:
+      min: 0
+      max: 19
+    low:
+      min: 20
+      max: 39
+    medium:
+      min: 40
+      max: 59
+    high:
+      min: 60
+      max: 79
+    critical:
+      min: 80
+      max: 100
+
+  priority_mapping:
+    critical: "P1"
+    high: "P2"
+    medium: "P3"
+    low: "P4"
+    informational: "P4"
+
+  # Base severity risk mappings (0-100 scale)
+  severity_base_scores:
+    CRITICAL: 60
+    HIGH: 45
+    MEDIUM: 30
+    LOW: 15
+
+  # Adjustments
+  weights:
+    corroboration_bonus_per_detector: 12
+    max_corroboration_bonus: 30
+    
+    progression_bonus_per_stage: 5
+    max_progression_bonus: 15
+    
+    temporal_bonus: 10 # Scaled by correlation_strength
+    
+    # Penalties for poor evidence/baselines
+    metadata_quality_penalty: -10
+    
+  decay:
+    enabled: true
+    decay_rate_per_day: 0.10 # 10% decay per day of inactivity
+    minimum_floor: 20        # Risk won't decay below 20 (LOW)

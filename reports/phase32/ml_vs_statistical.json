@@ -1,0 +1,76 @@
+{
+    "DNS_DGA": {
+        "ML_Mode": {
+            "Status": "EVALUATED",
+            "Mode": "default",
+            "TP": 44,
+            "TN": 9934,
+            "FP": 0,
+            "FN": 22,
+            "Precision": 1.0,
+            "Recall": 0.6667,
+            "F1": 0.8,
+            "Accuracy": 0.9978,
+            "Specificity": 1.0,
+            "FPR": 0.0,
+            "FNR": 0.3333
+        },
+        "Statistical_Mode": {
+            "Status": "EVALUATED",
+            "Mode": "statistical",
+            "TP": 44,
+            "TN": 9934,
+            "FP": 0,
+            "FN": 22,
+            "Precision": 1.0,
+            "Recall": 0.6667,
+            "F1": 0.8,
+            "Accuracy": 0.9978,
+            "Specificity": 1.0,
+            "FPR": 0.0,
+            "FNR": 0.3333
+        },
+        "Difference": {
+            "F1": 0.0,
+            "FPR": 0,
+            "FNR": 0.0
+        }
+    },
+    "Encrypted_Anomaly": {
+        "ML_Mode": {
+            "Status": "EVALUATED",
+            "Mode": "default",
+            "TP": 22,
+            "TN": 9863,
+            "FP": 115,
+            "FN": 0,
+            "Precision": 0.1606,
+            "Recall": 1.0,
+            "F1": 0.2767,
+            "Accuracy": 0.9885,
+            "Specificity": 0.9885,
+            "FPR": 0.0115,
+            "FNR": 0.0
+        },
+        "Statistical_Mode": {
+            "Status": "EVALUATED",
+            "Mode": "statistical",
+            "TP": 22,
+            "TN": 9863,
+            "FP": 115,
+            "FN": 0,
+            "Precision": 0.1606,
+            "Recall": 1.0,
+            "F1": 0.2767,
+            "Accuracy": 0.9885,
+            "Specificity": 0.9885,
+            "FPR": 0.0115,
+            "FNR": 0.0
+        },
+        "Difference": {
+            "F1": 0.0,
+            "FPR": 0.0,
+            "FNR": 0
+        }
+    }
+}

@@ -1,0 +1,132 @@
+/* 
+    Darktrace-inspired Cyberpunk Theme for Streamlit 
+*/
+
+/* Global Background */
+.stApp {
+    background-color: #050a15 !important;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(0, 229, 255, 0.05), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(176, 38, 255, 0.05), transparent 25%) !important;
+    color: #b0c4de !important;
+    font-family: 'Inter', 'Segoe UI', sans-serif !important;
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background-color: #03060f !important;
+    border-right: 1px solid rgba(0, 229, 255, 0.2) !important;
+    box-shadow: inset -5px 0 15px rgba(0,0,0,0.5) !important;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    color: #00e5ff !important;
+    text-shadow: 0 0 5px rgba(0, 229, 255, 0.3) !important;
+    font-weight: 300 !important;
+    letter-spacing: 1px;
+}
+
+/* Metric Widgets (Big Numbers) */
+[data-testid="stMetricValue"] {
+    color: #00ff66 !important;
+    text-shadow: 0 0 10px rgba(0, 255, 102, 0.5) !important;
+    font-family: 'Courier New', monospace !important;
+    font-weight: bold !important;
+}
+
+[data-testid="stMetricLabel"] {
+    color: #00e5ff !important;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 0.85rem !important;
+}
+
+/* Containers & Cards (Glassmorphism + Neon) */
+div[data-testid="stVerticalBlock"] > div[style*="flex-direction: column;"] > div[data-testid="stVerticalBlock"] {
+    background: rgba(11, 20, 38, 0.6) !important;
+    border: 1px solid rgba(0, 229, 255, 0.3) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.1), inset 0 0 20px rgba(0,0,0,0.5) !important;
+    padding: 1rem !important;
+    backdrop-filter: blur(5px);
+}
+
+/* Explicit style for custom status boxes we wrote in HTML */
+div[style*="background-color: #161b22;"] {
+    background: rgba(11, 20, 38, 0.8) !important;
+    border: 1px solid rgba(0, 229, 255, 0.4) !important;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.15) !important;
+}
+
+/* Dataframes / Tables */
+[data-testid="stDataFrame"] table {
+    background-color: transparent !important;
+    border-collapse: collapse;
+}
+
+[data-testid="stDataFrame"] th {
+    background-color: rgba(0, 229, 255, 0.1) !important;
+    color: #00e5ff !important;
+    border-bottom: 2px solid #00e5ff !important;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+[data-testid="stDataFrame"] td {
+    background-color: rgba(5, 10, 21, 0.6) !important;
+    color: #b0c4de !important;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1) !important;
+}
+
+[data-testid="stDataFrame"] tr:hover td {
+    background-color: rgba(0, 229, 255, 0.15) !important;
+    color: #fff !important;
+}
+
+/* Buttons */
+.stButton > button {
+    background-color: transparent !important;
+    border: 1px solid #00e5ff !important;
+    color: #00e5ff !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.3) !important;
+    transition: all 0.3s ease;
+}
+
+.stButton > button:hover {
+    background-color: rgba(0, 229, 255, 0.2) !important;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.6) !important;
+    color: #fff !important;
+}
+
+/* Expander */
+.streamlit-expanderHeader {
+    background-color: rgba(11, 20, 38, 0.8) !important;
+    color: #00e5ff !important;
+    border: 1px solid rgba(0, 229, 255, 0.3) !important;
+    border-radius: 4px;
+}
+
+.streamlit-expanderContent {
+    border: 1px solid rgba(0, 229, 255, 0.1) !important;
+    border-top: none !important;
+    background: rgba(5, 10, 21, 0.6) !important;
+}
+
+/* Charts (Altair/Vega) - we can only style the container in CSS */
+[data-testid="stVegaLiteChart"] {
+    background: rgba(11, 20, 38, 0.4) !important;
+    border: 1px solid rgba(0, 229, 255, 0.15) !important;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* Success/Error Alerts */
+[data-testid="stAlert"] {
+    background-color: rgba(11, 20, 38, 0.8) !important;
+    border-left-width: 4px !important;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5) !important;
+}

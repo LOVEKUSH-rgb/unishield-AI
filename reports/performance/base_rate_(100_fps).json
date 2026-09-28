@@ -1,0 +1,15 @@
+{
+  "benchmark_name": "Base Rate (100 fps)",
+  "target_rate": 100,
+  "duration": 5.348927736282349,
+  "received": 500,
+  "processed": 500,
+  "dropped": 0,
+  "throughput": 93.47667881329683,
+  "average_latency_ms": 0.5281538963317871,
+  "alerts": 155,
+  "incidents": 5,
+  "start_memory_mb": 169.6015625,
+  "peak_memory_mb": 170.3515625,
+  "end_memory_mb": 170.32421875
+}

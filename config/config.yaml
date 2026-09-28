@@ -1,0 +1,101 @@
+# ============================================================
+# UniShield AI — Master Configuration
+# SIH Problem Statement 26145
+# ============================================================
+# ALL tunable values live here.
+# No thresholds or magic numbers should appear in source files.
+# ============================================================
+
+project:
+  name: "UniShield AI"
+  version: "0.1.0"
+  description: "Passive network threat intelligence for critical infrastructure"
+  sih_problem: "26145"
+
+# ----------------------------------------------------------------
+# Logging
+# ----------------------------------------------------------------
+logging:
+  level: "INFO"              # DEBUG | INFO | WARNING | ERROR
+  format: "structured"       # structured | plain
+  log_file: "logs/unishield.log"
+  rotation: "10 MB"
+  retention: "7 days"
+
+# ----------------------------------------------------------------
+# Database
+# ----------------------------------------------------------------
+database:
+  engine: "sqlite"           # sqlite | postgresql
+  sqlite_path: "data/unishield.db"
+  postgresql:
+    host: "localhost"
+    port: 5432
+    name: "unishield"
+    user: "unishield"
+    password: ""             # set via environment variable
+
+# ----------------------------------------------------------------
+# Ingestion
+# ----------------------------------------------------------------
+ingestion:
+  mode: "pcap"               # pcap | zeek_logs | live (future)
+  pcap:
+    replay_rate: 1.0         # multiplier: 1.0 = real time, 0 = max speed
+    snaplen: 65535
+    promiscuous: false        # passive: never enable promiscuous probing
+  zeek_logs:
+    conn_log: "data/raw/conn.log"
+    dns_log: "data/raw/dns.log"
+    ssl_log: "data/raw/ssl.log"
+    http_log: "data/raw/http.log"
+
+# ----------------------------------------------------------------
+# Flow Engine
+# ----------------------------------------------------------------
+flows:
+  timeout_seconds: 120       # idle flow timeout
+  max_active_flows: 500000   # memory guard
+  sliding_window_seconds: 60 # for aggregate statistics
+  cleanup_interval_seconds: 10
+
+# ----------------------------------------------------------------
+# Feature Engine
+# ----------------------------------------------------------------
+features:
+  timing:
+    iat_max_samples: 1000    # max IAT samples stored per flow
+  entropy:
+    ngram_size: 3            # n-gram length for DGA analysis
+  behavioral:
+    baseline_window_minutes: 60
+    min_flow_samples: 10     # minimum flows before baseline is trusted
+
+# ----------------------------------------------------------------
+# API
+# ----------------------------------------------------------------
+api:
+  host: "0.0.0.0"
+  port: 8000
+  reload: false
+  alert_page_size: 50
+  max_alerts_returned: 1000
+
+# ----------------------------------------------------------------
+# Dashboard
+# ----------------------------------------------------------------
+dashboard:
+  host: "0.0.0.0"
+  port: 8501
+  refresh_interval_seconds: 5
+  max_alerts_shown: 200
+  api_base_url: "http://localhost:8000"
+
+# ----------------------------------------------------------------
+# Models
+# ----------------------------------------------------------------
+models:
+  base_path: "src/models/trained"
+  ddos_model: "ddos_rf.pkl"
+  dga_model: "dga_classifier.pkl"
+  c2_model: "c2_isoforest.pkl"

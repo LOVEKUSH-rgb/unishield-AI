@@ -1,0 +1,62 @@
+# Git
+.git
+.gitignore
+.github
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+.venv/
+
+# Environment Variables
+.env
+.env.local
+.env.production
+.env.*
+!.env.example
+
+# Testing
+.coverage
+.tox/
+.pytest_cache/
+htmlcov/
+tests/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Data and Models
+data/
+!data/models/trained/
+
+# Scratch & Scripts (if not needed in prod)
+scratch/
+scripts/deploy.sh
+scripts/backup_db.sh

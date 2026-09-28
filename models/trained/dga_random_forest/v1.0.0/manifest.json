@@ -1,0 +1,18 @@
+{
+    "model_name": "dga_random_forest",
+    "model_type": "random_forest",
+    "version": "v1.0.0",
+    "artifact": "dga_random_forest.pkl",
+    "sha256": "d6be9f0c94fd2dfc9532b40bdb64d6c9a80f31c7308121215314540de6c52134",
+    "feature_schema_version": "v1",
+    "framework": "scikit-learn",
+    "dataset": "MajesticMillion + 360Netlab (Real Data)",
+    "trained_at": "2026-08-29T07:52:45.353114+00:00",
+    "metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "roc_auc": 1.0
+    },
+    "status": "active"
+}

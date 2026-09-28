@@ -1,0 +1,16 @@
+{
+    "benchmark": {
+        "hardware": "NOT TESTED",
+        "cpu": "NOT TESTED",
+        "ram": "NOT TESTED",
+        "os": "NOT TESTED",
+        "python_version": "3.10+",
+        "dataset_size": "NOT AVAILABLE"
+    },
+    "metrics": {
+        "end_to_end_processing_time": "NOT VALIDATED",
+        "records_per_sec": "NOT VALIDATED",
+        "feature_extraction_time": "NOT VALIDATED",
+        "inference_time": "NOT VALIDATED"
+    }
+}

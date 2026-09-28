@@ -1,0 +1,40 @@
+{
+    "timestamp": "2026-08-29T14:40:55Z",
+    "dataset": "CTU-13",
+    "dataset_dir": "data\\raw\\external\\ctu13",
+    "status": "VALID",
+    "pcap_files": [
+        {
+            "filename": "botnet-capture-20110810-neris.pcap",
+            "path": "data\\raw\\external\\ctu13\\botnet-capture-20110810-neris.pcap",
+            "size_bytes": 58266506,
+            "valid": true,
+            "format": "pcap",
+            "magic": "d4c3b2a1",
+            "packets_counted": 10000,
+            "truncated": true,
+            "first_timestamp": 1312966900.475792,
+            "last_timestamp": 1312968185.499437,
+            "error": null,
+            "duration_seconds": 1285.024,
+            "labels": {
+                "available": true,
+                "path": "data\\raw\\external\\ctu13\\capture20110810.binetflow",
+                "total_rows": 608632,
+                "labeled_rows": 7,
+                "botnet_flows": 0,
+                "normal_flows": 7,
+                "has_header": true
+            }
+        }
+    ],
+    "binetflow_files": [],
+    "summary": {
+        "pcap_files_found": 1,
+        "pcap_files_valid": 1,
+        "pcap_files_labeled": 1,
+        "total_packets_sampled": 10000,
+        "ground_truth_available": true
+    },
+    "notes": []
+}

@@ -1,0 +1,35 @@
+{
+  "title": "UniShield Reliability & SLO",
+  "uid": "unishield-reliability",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "API Availability SLO",
+      "gridPos": {"h": 4, "w": 4, "x": 0, "y": 0},
+      "targets": [{"expr": "avg_over_time(up{job=\"unishield-api\"}[1h]) * 100"}]
+    },
+    {
+      "type": "stat",
+      "title": "Pipeline Success Rate",
+      "gridPos": {"h": 4, "w": 4, "x": 4, "y": 0},
+      "targets": [{"expr": "100 - (unishield:ingestion_drop_rate / unishield:ingestion_events_per_second * 100)"}]
+    },
+    {
+      "type": "timeseries",
+      "title": "Redis vs PostgreSQL Errors",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+      "targets": [
+        {"expr": "unishield:database_error_rate", "legendFormat": "Database"},
+        {"expr": "unishield:redis_error_rate", "legendFormat": "Redis"}
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Pipeline P99 Latency",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4},
+      "targets": [{"expr": "unishield:pipeline_p99_latency", "legendFormat": "P99"}]
+    }
+  ],
+  "schemaVersion": 38,
+  "timezone": "browser"
+}

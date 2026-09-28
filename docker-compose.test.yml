@@ -1,0 +1,80 @@
+# UniShield AI — docker-compose (Test)
+# Used for automated testing and CI. Databases are ephemeral.
+
+version: "3.9"
+
+networks:
+  unishield-test-net:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=test_user
+      - POSTGRES_PASSWORD=test_password
+      - POSTGRES_DB=test_db
+    # Ephemeral storage for testing
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d test_db"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+    networks:
+      - unishield-test-net
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass test_redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "test_redis", "ping"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+    networks:
+      - unishield-test-net
+
+  unishield-api:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      - ENVIRONMENT=test
+      - LOG_LEVEL=DEBUG
+      - DATABASE_URL=postgresql://test_user:test_password@postgres:5432/test_db
+      - REDIS_URL=redis://:test_redis@redis:6379/0
+      - JWT_SECRET_KEY=test-secret
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - unishield-test-net
+    command: ["python", "-m", "pytest", "tests/", "-v"]
+
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: unishield-prometheus-test
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - unishield-test-net
+
+  grafana:
+    image: grafana/grafana:10.1.2
+    container_name: unishield-grafana-test
+    depends_on:
+      - prometheus
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - unishield-test-net

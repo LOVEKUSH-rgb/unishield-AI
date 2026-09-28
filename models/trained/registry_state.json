@@ -1,0 +1,12 @@
+{
+    "dga_random_forest": {
+        "active_version": "v1.0.0",
+        "status": "LOADED",
+        "integrity": "VALID"
+    },
+    "encrypted_xgboost": {
+        "active_version": "v1.0.0",
+        "status": "LOADED",
+        "integrity": "VALID"
+    }
+}

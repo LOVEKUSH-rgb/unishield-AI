@@ -1,0 +1,31 @@
+# ----------------------------------------------------------------
+# Cross-Threat Correlation Rules
+# ----------------------------------------------------------------
+correlation:
+  # Base time proximity
+  correlation_window_seconds: 3600  # 1 hour default
+  deduplication_window_seconds: 300 # 5 minutes default
+  
+  # Correlation weights (must sum up to > threshold for merge)
+  weights:
+    source_match: 0.35
+    destination_match: 0.30
+    time_proximity: 0.20 # Full weight if within 5 mins, decays to 0 at correlation_window_seconds
+    sequence_match: 0.15 # Aligning with a known detector progression
+    
+  # Threshold for two alerts to belong to same incident
+  merge_threshold: 0.60
+  
+  # Multi-host coordinated activity threshold 
+  # (Requires very strong destination and time correlation if source mismatch)
+  multi_host_threshold: 0.85
+  
+  # Progression Sequence Map (Expected logical flow of attacks)
+  # Not all steps are required, but following the general progression is suspicious.
+  detector_progression:
+    - Reconnaissance
+    - DNS_DGA
+    - DNS_Tunnel
+    - C2_Beacon
+    - EncryptedAnomaly
+    - Exfiltration

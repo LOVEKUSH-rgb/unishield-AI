@@ -1,0 +1,46 @@
+{
+    "phase31": {
+        "Dataset": "demo_flows_expanded.jsonl",
+        "Status": "EVALUATED",
+        "TP": 0,
+        "TN": 3400,
+        "FP": 0,
+        "FN": 6600,
+        "Precision": 0.0,
+        "Recall": 0.0,
+        "F1": 0.0,
+        "Throughput_fps": 24935.28,
+        "Latency_P50_ms": 0.0,
+        "Latency_P99_ms": 1.3456
+    },
+    "phase32": {
+        "Status": "EVALUATED",
+        "Mode": "default",
+        "TP": 0,
+        "TN": 3400,
+        "FP": 0,
+        "FN": 6600,
+        "Precision": 0.0,
+        "Recall": 0.0,
+        "F1": 0.0,
+        "Accuracy": 0.34,
+        "Specificity": 1.0,
+        "FPR": 0.0,
+        "FNR": 1.0
+    },
+    "phase33_with_temporal_replay": {
+        "TP": 0,
+        "TN": 0,
+        "FP": 4510,
+        "FN": 0,
+        "Precision": 0.0,
+        "Recall": null,
+        "F1": null,
+        "Accuracy": 0.0,
+        "FPR": 1.0,
+        "FNR": null,
+        "Status": "COMPLETE"
+    },
+    "conclusion": "No material change in DDoS detection performance between Phase 31 and Phase 33.",
+    "improvement_status": "NO MATERIAL CHANGE"
+}

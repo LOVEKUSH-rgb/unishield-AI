@@ -1,0 +1,32 @@
+{
+  "title": "UniShield Detector Performance",
+  "uid": "unishield-detection",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Invocation Rate by Detector",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "targets": [{"expr": "rate(unishield_detector_invocations_total[1m])", "legendFormat": "{{detector_name}}"}]
+    },
+    {
+      "type": "timeseries",
+      "title": "Alert Rate by Detector",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "targets": [{"expr": "rate(unishield_detector_alerts_total[1m])", "legendFormat": "{{detector_name}}"}]
+    },
+    {
+      "type": "timeseries",
+      "title": "Detector Errors",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "targets": [{"expr": "rate(unishield_detector_errors_total[1m])", "legendFormat": "{{detector_name}}"}]
+    },
+    {
+      "type": "timeseries",
+      "title": "Detector P95 Latency",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "targets": [{"expr": "histogram_quantile(0.95, sum(rate(unishield_detector_latency_seconds_bucket[1m])) by (le, detector_name))", "legendFormat": "{{detector_name}}"}]
+    }
+  ],
+  "schemaVersion": 38,
+  "timezone": "browser"
+}

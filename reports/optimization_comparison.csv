@@ -1,0 +1,10 @@
+Detector,Metric,Baseline (Phase 12),Optimized (Phase 13),Improvement
+DDoS,Precision,NOT VALIDATED,NOT VALIDATED,Threshold increased (burst multiplier 5 -> 8)
+DDoS,False Positive Rate,NOT VALIDATED,NOT VALIDATED,Temporal aggregation strictly enforced
+C2_Beacon,Precision,NOT VALIDATED,NOT VALIDATED,Low repeat count increased (5 -> 10)
+C2_Beacon,Recall,NOT VALIDATED,NOT VALIDATED,CV weighting adjusted
+Reconnaissance,Precision,NOT VALIDATED,NOT VALIDATED,Min connections increased (20 -> 30)
+Reconnaissance,Recall,NOT VALIDATED,NOT VALIDATED,-
+DGA_DNS,Precision,NOT VALIDATED,NOT VALIDATED,Structural vs entropy weighting improved
+Exfiltration,Precision,NOT VALIDATED,NOT VALIDATED,-
+Encrypted,Precision,NOT VALIDATED,NOT VALIDATED,-

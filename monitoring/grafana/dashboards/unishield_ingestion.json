@@ -1,0 +1,35 @@
+{
+  "title": "UniShield Ingestion Reliability",
+  "uid": "unishield-ingestion",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Events Received vs Dropped",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "targets": [
+        {"expr": "unishield:ingestion_events_per_second", "legendFormat": "Received"},
+        {"expr": "unishield:ingestion_drop_rate", "legendFormat": "Dropped"}
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Queue Depth",
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
+      "targets": [{"expr": "unishield_ingestion_queue_depth"}]
+    },
+    {
+      "type": "stat",
+      "title": "Zeek Merged Events",
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0},
+      "targets": [{"expr": "rate(unishield_zeek_merged_events_total[1m])"}]
+    },
+    {
+      "type": "timeseries",
+      "title": "Ingestion Errors",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "targets": [{"expr": "rate(unishield_ingestion_errors_total[1m])"}]
+    }
+  ],
+  "schemaVersion": 38,
+  "timezone": "browser"
+}
