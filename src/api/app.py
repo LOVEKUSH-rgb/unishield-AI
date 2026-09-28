@@ -118,8 +118,10 @@ def health_live():
 
 @app.get("/seed_debug")
 def seed_debug():
+    from src.persistence.database import SessionLocal, engine_error
+    if not SessionLocal:
+        return {"status": "error", "error": "SessionLocal is None", "engine_error": engine_error}
     try:
-        from src.persistence.database import SessionLocal
         from src.persistence.models import User
         from src.api.auth import get_password_hash
         db = SessionLocal()
