@@ -116,6 +116,29 @@ def health_live():
     # Unprotected liveness endpoint
     return {"status": "healthy", "api": "healthy"}
 
+@app.get("/seed_debug")
+def seed_debug():
+    try:
+        from src.persistence.database import SessionLocal
+        from src.persistence.models import User
+        from src.api.auth import get_password_hash
+        db = SessionLocal()
+        users_added = []
+        for role, username in [("admin", "admin"), ("analyst", "analyst"), ("viewer", "viewer")]:
+            existing = db.query(User).filter(User.username == username).first()
+            if not existing:
+                user = User(username=username, password_hash=get_password_hash("changeme"), role=role)
+                db.add(user)
+                users_added.append(username)
+        db.commit()
+        
+        # Verify
+        count = db.query(User).count()
+        return {"status": "success", "users_added": users_added, "total_users": count}
+    except Exception as e:
+        import traceback
+        return {"status": "error", "error": str(e), "traceback": traceback.format_exc()}
+
 @app.get("/health/ready")
 def health_ready(db: Session = Depends(get_db)):
     status_dict = {"status": "healthy", "postgres": "healthy", "redis": "healthy", "models": "healthy"}
