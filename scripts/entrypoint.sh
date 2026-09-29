@@ -8,7 +8,7 @@ echo "Starting UniShield AI API Entrypoint..."
 
 # Fix Render postgres:// dialect issue globally for this script
 if [[ "$DATABASE_URL" == postgres://* ]]; then
-    export DATABASE_URL="postgresql://${DATABASE_URL#postgres://}"
+    export DATABASE_URL="postgresql+psycopg2://${DATABASE_URL#postgres://}"
 fi
 
 # START THE APPLICATION IMMEDIATELY IN THE BACKGROUND

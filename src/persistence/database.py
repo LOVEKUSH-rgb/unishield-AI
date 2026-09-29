@@ -14,9 +14,12 @@ logger = get_logger(__name__)
 
 DATABASE_URL = settings.database_url
 if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+    # Force psycopg2 dialect explicitly for Render
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg2://", 1)
 
+Base = declarative_base()
 engine_error = None
+
 try:
     engine = create_engine(
         DATABASE_URL,
@@ -24,7 +27,6 @@ try:
         pool_pre_ping=True
     )
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    Base = declarative_base()
 except Exception as e:
     import traceback
     logger.error(f"Failed to initialize database engine: {e}")
